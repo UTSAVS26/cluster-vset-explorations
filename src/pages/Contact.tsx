@@ -8,7 +8,7 @@ const Contact = () => {
       name: 'WhatsApp', 
       icon: MessageCircle, 
       url: 'https://whatsapp.com/channel/0029VbAz3MRFMqrhOULA2k07',
-      description: 'Join our WhatsApp group for quick updates and discussions',
+      description: 'Follow the CLUSTER channel on WhatsApp',
       color: 'bg-green-500/10 text-green-400 border-green-500/20 hover:bg-green-500/20' 
     },
     { 
@@ -119,7 +119,7 @@ const Contact = () => {
                         className="mt-4" 
                         asChild
                       >
-                        <a href={`mailto:${info.content}`}>
+                        <a href={`mailto:dsclub.cluster@vips.edu`}>
                           Send Email
                         </a>
                       </Button>
@@ -212,7 +212,7 @@ const Contact = () => {
                   to connect with current members and learn about upcoming events.
                 </CardDescription>
                 <Button variant="outline" size="sm" asChild>
-                  <a href="mailto:cluster.vset@university.edu">
+                  <a href="mailto:dsclub.cluster@vips.edu">
                     Contact Us
                   </a>
                 </Button>
@@ -269,7 +269,7 @@ const Contact = () => {
                   and external organizations. Reach out to discuss potential partnerships.
                 </CardDescription>
                 <Button variant="outline" size="sm" asChild>
-                  <a href="mailto:cluster.vset@university.edu">
+                  <a href="mailto:dsclub.cluster@vips.edu">
                     Collaborate
                   </a>
                 </Button>
@@ -291,7 +291,7 @@ const Contact = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" asChild>
-              <a href="mailto:cluster.vset@university.edu">
+              <a href="mailto:dsclub.cluster@vips.edu">
                 <Mail className="w-5 h-5 mr-2" />
                 Send us an Email
               </a>

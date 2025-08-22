@@ -175,7 +175,7 @@ const Events = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" asChild>
-              <a href="mailto:cluster.vset@university.edu">
+              <a href="mailto:dsclub.cluster@vips.edu">
                 Subscribe to Updates
               </a>
             </Button>

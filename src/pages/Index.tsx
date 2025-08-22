@@ -171,7 +171,7 @@ const Index = () => {
       </section>
 
       {/* Partners & Sponsors */}
-      {sponsorsData && sponsorsData.length > 0 && (
+      {/* {sponsorsData && sponsorsData.length > 0 && (
         <section className="py-20 bg-card/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
@@ -199,7 +199,7 @@ const Index = () => {
             </div>
           </div>
         </section>
-      )}
+      )} */}
 
       {/* Call to Action */}
       <section className="py-20">

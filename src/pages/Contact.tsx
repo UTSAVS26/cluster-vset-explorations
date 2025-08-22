@@ -1,4 +1,4 @@
-import { Mail, MessageCircle, Instagram, Linkedin, Github, MessageSquare, MapPin, Clock } from 'lucide-react';
+import { Mail, MessageCircle, Instagram, Linkedin, Github, MessageSquare, MapPin, Twitter } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
@@ -7,35 +7,42 @@ const Contact = () => {
     { 
       name: 'WhatsApp', 
       icon: MessageCircle, 
-      url: 'https://wa.me/1234567890',
+      url: 'https://whatsapp.com/channel/0029VbAz3MRFMqrhOULA2k07',
       description: 'Join our WhatsApp group for quick updates and discussions',
       color: 'bg-green-500/10 text-green-400 border-green-500/20 hover:bg-green-500/20' 
     },
     { 
       name: 'Instagram', 
       icon: Instagram, 
-      url: 'https://instagram.com/clustervset',
+      url: 'https://www.instagram.com/cluster_vips/',
       description: 'Follow us for event photos and behind-the-scenes content',
       color: 'bg-pink-500/10 text-pink-400 border-pink-500/20 hover:bg-pink-500/20' 
     },
     { 
       name: 'LinkedIn', 
       icon: Linkedin, 
-      url: 'https://linkedin.com/company/cluster-vset',
+      url: 'https://www.linkedin.com/company/cluster-vips',
       description: 'Connect with us professionally and see career opportunities',
       color: 'bg-blue-500/10 text-blue-400 border-blue-500/20 hover:bg-blue-500/20' 
     },
     { 
       name: 'GitHub', 
       icon: Github, 
-      url: 'https://github.com/cluster-vset',
+      url: 'https://github.com/CLUSTER-DS-Club/',
       description: 'Explore our open-source projects and contribute to development',
       color: 'bg-gray-500/10 text-gray-300 border-gray-500/20 hover:bg-gray-500/20' 
+    },
+    {
+      name: 'Twitter',
+      icon: Twitter,
+      url: 'https://twitter.com/cluster_dsclub',
+      description: 'Follow us for the latest news, announcements, and tech insights.',
+      color: 'bg-sky-500/10 text-sky-400 border-sky-500/20 hover:bg-sky-500/20'
     },
     { 
       name: 'Discord', 
       icon: MessageSquare, 
-      url: 'https://discord.gg/clustervset',
+      url: 'https://discord.gg/6QN83D89vx',
       description: 'Join our Discord server for real-time collaboration and support',
       color: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20 hover:bg-indigo-500/20' 
     },
@@ -44,21 +51,15 @@ const Contact = () => {
   const contactInfo = [
     {
       title: 'Official Email',
-      content: 'cluster.vset@university.edu',
+      content: 'dsclub.cluster@vips.edu',
       icon: Mail,
       description: 'For general inquiries, partnerships, and collaboration opportunities'
     },
     {
       title: 'Campus Location',
-      content: 'Computer Science Building, Room 204',
+      content: 'VIPS-TC, AU- Block (Outer Ring Road) Pitampura, Delhi - 110034',
       icon: MapPin,
       description: 'Visit us during office hours for in-person meetings'
-    },
-    {
-      title: 'Office Hours',
-      content: 'Monday - Friday, 2:00 PM - 5:00 PM',
-      icon: Clock,
-      description: 'Drop by during these hours to meet with our team'
     }
   ];
 
@@ -93,7 +94,7 @@ const Contact = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 max-w-4xl mx-auto">
             {contactInfo.map((info, index) => {
               const IconComponent = info.icon;
               return (

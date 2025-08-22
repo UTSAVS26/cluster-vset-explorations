@@ -8,13 +8,16 @@ const Leadership = () => {
   const TeamMemberCard = ({ member, isCore = false }: { member: any, isCore?: boolean }) => (
     <Card className="text-center hover-glow-primary transition-all duration-300 group bg-card/50">
       <CardHeader>
-        <div className="relative mb-4">
-          <img 
-            src={member.image} 
+        <div className="relative h-32 mb-4 flex items-center justify-center">
+          {/* Pill-shaped background element */}
+          <div className="absolute w-48 h-24 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full blur-lg opacity-0 group-hover:opacity-60 transition-opacity duration-300" />
+
+          {/* The image itself */}
+          <img
+            src={member.image}
             alt={member.name}
-            className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-primary/20 group-hover:border-primary/60 transition-colors duration-300"
+            className="relative z-10 w-28 h-28 object-cover rounded-full border-2 border-primary/40 group-hover:border-primary transition-all duration-300 shadow-lg"
           />
-          <div className="absolute inset-0 rounded-full bg-gradient-primary opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
         </div>
         <CardTitle className="text-xl text-gradient-primary group-hover:text-gradient-secondary transition-colors">
           {member.name}
@@ -29,7 +32,7 @@ const Leadership = () => {
             {member.bio}
           </p>
         )}
-        
+
         <div className="flex justify-center space-x-3">
           {member.email && (
             <Button
@@ -90,7 +93,7 @@ const Leadership = () => {
               <span className="text-foreground"> Leadership</span>
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-              Meet the passionate individuals who drive CLUSTER-VSET's mission of collaborative 
+              Meet the passionate individuals who drive CLUSTER-VSET's mission of collaborative
               learning and innovative research.
             </p>
           </div>
@@ -182,7 +185,7 @@ const Leadership = () => {
               The principles that guide how we lead and serve our community
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card className="text-center hover-glow-primary transition-all duration-300 bg-card/70">
               <CardHeader>
@@ -191,7 +194,7 @@ const Leadership = () => {
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-muted-foreground text-lg leading-relaxed">
-                  We believe in shared leadership where every voice matters and decisions are made collectively 
+                  We believe in shared leadership where every voice matters and decisions are made collectively
                   for the benefit of our entire community.
                 </CardDescription>
               </CardContent>
@@ -204,7 +207,7 @@ const Leadership = () => {
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-muted-foreground text-lg leading-relaxed">
-                  Every decision we make is guided by our commitment to advancing collaborative learning 
+                  Every decision we make is guided by our commitment to advancing collaborative learning
                   and innovative research in our academic community.
                 </CardDescription>
               </CardContent>
@@ -217,7 +220,7 @@ const Leadership = () => {
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-muted-foreground text-lg leading-relaxed">
-                  We strive to empower every member to reach their potential and contribute meaningfully 
+                  We strive to empower every member to reach their potential and contribute meaningfully
                   to research and academic excellence.
                 </CardDescription>
               </CardContent>
@@ -234,7 +237,7 @@ const Leadership = () => {
             <span className="text-foreground"> Leadership?</span>
           </h2>
           <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-            We're always looking for passionate individuals to join our leadership team and 
+            We're always looking for passionate individuals to join our leadership team and
             help shape the future of CLUSTER-VSET.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

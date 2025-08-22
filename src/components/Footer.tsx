@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { MessageCircle, Instagram, Linkedin, Github, MessageSquare } from 'lucide-react';
+import { MessageCircle, Instagram, Linkedin, Github, MessageSquare, Twitter } from 'lucide-react';
 
 const Footer = () => {
   const navItems = [
@@ -17,35 +17,42 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { 
-      name: 'WhatsApp', 
-      icon: MessageCircle, 
-      url: 'https://wa.me/1234567890',
-      color: 'hover:text-green-400' 
+    {
+      name: 'WhatsApp',
+      icon: MessageCircle,
+      url: 'https://wa.me/+917303357810',
+      color: 'hover:text-green-400'
     },
-    { 
-      name: 'Instagram', 
-      icon: Instagram, 
-      url: 'https://instagram.com/clustervset',
-      color: 'hover:text-pink-400' 
+    {
+      name: 'Instagram',
+      icon: Instagram,
+      url: 'https://www.instagram.com/cluster_vips/',
+      color: 'hover:text-pink-400'
     },
-    { 
-      name: 'LinkedIn', 
-      icon: Linkedin, 
-      url: 'https://linkedin.com/company/cluster-vset',
-      color: 'hover:text-blue-400' 
+    {
+      name: 'LinkedIn',
+      icon: Linkedin,
+      url: 'https://www.linkedin.com/company/cluster-vips',
+      color: 'hover:text-blue-400'
     },
-    { 
-      name: 'GitHub', 
-      icon: Github, 
-      url: 'https://github.com/cluster-vset',
-      color: 'hover:text-gray-300' 
+    {
+      name: 'GitHub',
+      icon: Github,
+      url: 'https://github.com/CLUSTER-DS-Club/',
+      color: 'hover:text-gray-300'
     },
-    { 
-      name: 'Discord', 
-      icon: MessageSquare, 
-      url: 'https://discord.gg/clustervset',
-      color: 'hover:text-indigo-400' 
+    {
+      name: 'Twitter',
+      icon: Twitter,
+      url: 'https://twitter.com/cluster_dsclub',
+      description: 'Follow us for the latest news, announcements, and tech insights.',
+      color: 'hover:text-sky-400'
+    },
+    {
+      name: 'Discord',
+      icon: MessageSquare,
+      url: 'https://discord.gg/6QN83D89vx',
+      color: 'hover:text-indigo-400'
     },
   ];
 
@@ -56,15 +63,13 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-bold">CV</span>
-              </div>
+              <img src="DS CLUB Logo.jpg" alt="CLUSTER-VSET Logo" className="w-8 h-8" />
               <span className="text-2xl font-bold text-gradient-primary">
                 CLUSTER-VSET
               </span>
             </div>
             <p className="text-muted-foreground mb-4 max-w-md">
-              Collaborative Learning Using Statistical Trends & Exploratory Research. 
+              Collaborative Learning Using Statistical Trends & Exploratory Research.
               Empowering students through data science, research, and academic collaboration.
             </p>
             <div className="flex space-x-4">
@@ -141,15 +146,15 @@ const Footer = () => {
         <div className="border-t border-border pt-8 mt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-muted-foreground text-sm">
-              © 2024 CLUSTER-VSET. All rights reserved.
+              © 2025 CLUSTER-VSET. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <a href="#" className="text-muted-foreground hover:text-foreground text-sm transition-colors duration-300">
+              <Link to="/privacy-policy" className="text-muted-foreground hover:text-foreground text-sm transition-colors duration-300">
                 Privacy Policy
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-foreground text-sm transition-colors duration-300">
+              </Link>
+              <Link to="/terms-of-service" className="text-muted-foreground hover:text-foreground text-sm transition-colors duration-300">
                 Terms of Service
-              </a>
+              </Link>
             </div>
           </div>
         </div>

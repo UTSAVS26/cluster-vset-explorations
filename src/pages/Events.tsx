@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Calendar, Clock, MapPin, Users, ExternalLink, Tag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,8 +14,8 @@ const Events = () => {
   const EventCard = ({ event, isUpcoming = true }: { event: any, isUpcoming?: boolean }) => (
     <Card className="hover-glow-primary transition-all duration-300 bg-card/50">
       <div className="aspect-video overflow-hidden rounded-t-lg">
-        <img 
-          src={event.image} 
+        <img
+          src={event.image}
           alt={event.title}
           className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
         />
@@ -56,7 +57,7 @@ const Events = () => {
         <CardDescription className="text-muted-foreground mb-4 leading-relaxed">
           {event.description}
         </CardDescription>
-        
+
         {event.tags && (
           <div className="flex flex-wrap gap-2 mb-4">
             {event.tags.map((tag: string, index: number) => (
@@ -67,14 +68,20 @@ const Events = () => {
             ))}
           </div>
         )}
-        
+
         {isUpcoming && event.registrationLink && (
-          <Button className="w-full" asChild>
-            <a href={event.registrationLink}>
-              Register Now
-              <ExternalLink className="w-4 h-4 ml-2" />
-            </a>
-          </Button>
+          event.status === 'planning' ? (
+            <Button className="w-full" disabled>
+              Registration Coming Soon
+            </Button>
+          ) : (
+            <Button className="w-full" asChild>
+              <a href={event.registrationLink}>
+                Register Now
+                <ExternalLink className="w-4 h-4 ml-2" />
+              </a>
+            </Button>
+          )
         )}
       </CardContent>
     </Card>
@@ -91,7 +98,7 @@ const Events = () => {
               <span className="text-foreground"> Workshops</span>
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-              Join our community events, workshops, and research symposiums to expand your knowledge 
+              Join our community events, workshops, and research symposiums to expand your knowledge
               and connect with fellow researchers.
             </p>
           </div>
@@ -173,10 +180,10 @@ const Events = () => {
               </a>
             </Button>
             <Button variant="outline" size="lg" asChild>
-              <a href="#" target="_blank" rel="noopener noreferrer">
+              <Link to="/contact">
                 Follow Us on Social
                 <ExternalLink className="w-4 h-4 ml-2" />
-              </a>
+              </Link>
             </Button>
           </div>
         </div>

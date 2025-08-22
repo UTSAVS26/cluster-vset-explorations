@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -6,6 +6,10 @@ import { Button } from '@/components/ui/button';
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   const navItems = [
     { name: 'Home', path: '/' },
@@ -27,14 +31,16 @@ const Navigation = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link 
-            to="/" 
-            className="flex items-center space-x-3 hover-glow-primary transition-all duration-300"
+          <Link
+            to="/"
+            className="group flex items-center space-x-3 transition-all duration-300"
           >
-            <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">CV</span>
-            </div>
-            <span className="text-xl font-bold text-gradient-primary">
+            <img
+              src="/DS CLUB Logo.jpg" // Path to your logo in the public folder
+              alt="CLUSTER-VSET Logo"
+              className="w-8 h-8 transition-transform duration-300 group-hover:scale-110"
+            />
+            <span className="text-xl font-bold text-gradient-primary transition-all duration-300 group-hover:brightness-110">
               CLUSTER-VSET
             </span>
           </Link>
@@ -46,11 +52,10 @@ const Navigation = () => {
                 <Link
                   key={item.name}
                   to={item.path}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
-                    isActivePath(item.path)
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 ${isActivePath(item.path)
                       ? 'bg-primary text-primary-foreground glow-primary'
                       : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
-                  }`}
+                    }`}
                 >
                   {item.name}
                 </Link>
@@ -81,11 +86,10 @@ const Navigation = () => {
                 key={item.name}
                 to={item.path}
                 onClick={() => setIsOpen(false)}
-                className={`block px-3 py-2 rounded-md text-base font-medium transition-all duration-300 ${
-                  isActivePath(item.path)
+                className={`block px-3 py-2 rounded-md text-base font-medium transition-all duration-300 ${isActivePath(item.path)
                     ? 'bg-primary text-primary-foreground glow-primary'
                     : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
-                }`}
+                  }`}
               >
                 {item.name}
               </Link>

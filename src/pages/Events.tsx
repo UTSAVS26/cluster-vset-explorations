@@ -37,7 +37,7 @@ const Events = () => {
         <div className="space-y-2 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
             <Calendar className="w-4 h-4" />
-            <span>{new Date(event.date).toLocaleDateString()}</span>
+            <span>{event.date ? event.date : ''}</span>
           </div>
           {event.time && (
             <div className="flex items-center gap-2">

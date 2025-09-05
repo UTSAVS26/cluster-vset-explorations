@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 import Index from "./pages/Index";
-import About from "./pages/About";
+
 import Events from "./pages/Events";
 import Projects from "./pages/Projects";
 import Resources from "./pages/Resources";
@@ -30,7 +30,7 @@ const App = () => (
           <main className="pt-16">
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/about" element={<About />} />
+             
               <Route path="/events" element={<Events />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/resources" element={<Resources />} />

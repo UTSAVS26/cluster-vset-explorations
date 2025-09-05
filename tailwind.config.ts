@@ -19,7 +19,11 @@ export default {
 		},
 		extend: {
 			fontFamily: {
+				orbitron: ['Orbitron', 'sans-serif'],
 				inter: ['Inter', 'sans-serif'],
+				mono: ['JetBrains Mono', 'monospace'],
+				display: ['Orbitron', 'sans-serif'],
+				body: ['Inter', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -57,14 +61,22 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				'neon-primary': '#6C63FF',
+				'neon-cyan': '#00CFFF',
+				'neon-yellow': '#FFD447',
+				'text-primary': '#EDEDED',
+				'text-bright': '#FFFFFF',
 			},
 			backgroundImage: {
 				'gradient-primary': 'var(--gradient-primary)',
 				'gradient-hero': 'var(--gradient-hero)',
 				'gradient-glow': 'var(--gradient-glow)',
+				'gradient-cyan': 'var(--gradient-cyan)',
+				'gradient-magenta': 'var(--gradient-magenta)',
 			},
 			boxShadow: {
 				'glow': 'var(--shadow-glow)',
+				'neon': 'var(--shadow-neon)',
 				'card': 'var(--shadow-card)',
 				'elegant': 'var(--shadow-elegant)',
 			},

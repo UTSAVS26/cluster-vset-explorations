@@ -145,7 +145,20 @@ const Resources = () => {
       {/* Resources Content */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Tabs defaultValue="guides" className="w-full">
+          {/* Coming Soon Message */}
+          <div className="text-center py-32">
+            <BookOpen className="w-24 h-24 mx-auto mb-8 text-muted-foreground" />
+            <h2 className="text-4xl font-bold text-gradient-primary mb-4">
+              Resources Coming Soon
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              We're currently curating an amazing collection of learning resources, tools, and datasets. 
+              Check back soon to access our comprehensive library for data science and research.
+            </p>
+          </div>
+          
+          {/* Original Resources Display - Commented Out */}
+          {/* <Tabs defaultValue="guides" className="w-full">
             <TabsList className="grid w-full grid-cols-3 mb-12">
               <TabsTrigger value="guides" className="text-lg py-3">
                 <BookOpen className="w-5 h-5 mr-2" />
@@ -208,7 +221,7 @@ const Resources = () => {
                 </div>
               </div>
             </TabsContent>
-          </Tabs>
+          </Tabs> */}
         </div>
       </section>
 

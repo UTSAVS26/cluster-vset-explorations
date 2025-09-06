@@ -1,48 +1,434 @@
 import { Mail, Linkedin, Github, Users, Award, Target, Zap } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { teamData } from '@/data/teamData';
+import { useState } from "react";
+import styled from 'styled-components';
+import { FaTwitter, FaInstagram, FaXTwitter } from "react-icons/fa6";
+
+// Styled Components for Uiverse.io Card Design
+const CardContainer = styled.div`
+  width: 336px;
+  height: 399px;
+  background: linear-gradient(135deg, #0B0B1A 0%, #1a0a2e 50%, #0B0B1A 100%);
+  border-radius: 32px;
+  padding: 3px;
+  position: relative;
+  box-shadow: rgba(108, 99, 255, 0.3) 0px 20px 40px -20px;
+  transition: all 0.5s ease-in-out;
+  margin: 0 auto;
+  border: 1px solid rgba(108, 99, 255, 0.2);
+  
+  &:hover {
+    border-top-left-radius: 55px;
+    box-shadow: rgba(108, 99, 255, 0.5) 0px 30px 60px -20px;
+    border-color: rgba(108, 99, 255, 0.4);
+  }
+`;
+
+const MailButton = styled.button`
+  position: absolute;
+  right: 2rem;
+  top: 1.4rem;
+  background: rgba(108, 99, 255, 0.1);
+  border: 1px solid rgba(108, 99, 255, 0.3);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  
+  svg {
+    stroke: #6C63FF;
+    stroke-width: 2px;
+    transition: all 0.3s ease;
+  }
+  
+  &:hover {
+    background: rgba(0, 207, 255, 0.2);
+    border-color: #00CFFF;
+    transform: scale(1.1);
+  }
+  
+  &:hover svg {
+    stroke: #00CFFF;
+  }
+`;
+
+const ProfilePic = styled.div`
+  position: absolute;
+  width: calc(100% - 6px);
+  height: calc(100% - 6px);
+  top: 3px;
+  left: 3px;
+  border-radius: 29px;
+  z-index: 1;
+  border: 0px solid #6C63FF;
+  overflow: hidden;
+  transition: all 0.5s ease-in-out 0.2s, z-index 0.5s ease-in-out 0.2s;
+  
+  img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-position: center;
+    transition: all 0.5s ease-in-out 0s;
+  }
+  
+  ${CardContainer}:hover & {
+    width: 120px;
+    height: 120px;
+    aspect-ratio: 1;
+    top: 15px;
+    left: 15px;
+    border-radius: 50%;
+    z-index: 3;
+    border: 7px solid #6C63FF;
+    box-shadow: rgba(108, 99, 255, 0.4) 0px 10px 20px 0px;
+    transition: all 0.5s ease-in-out, z-index 0.5s ease-in-out 0.1s;
+  }
+  
+  ${CardContainer}:hover &:hover {
+    transform: scale(1.1);
+    border-radius: 20px;
+  }
+  
+  ${CardContainer}:hover & img {
+    object-fit: contain;
+    transform: scale(1.1);
+    object-position: center;
+    transition: all 0.5s ease-in-out 0.5s;
+  }
+`;
+
+const Bottom = styled.div`
+  position: absolute;
+  bottom: 3px;
+  left: 3px;
+  right: 3px;
+  background: linear-gradient(135deg, #6C63FF 0%, #00CFFF 100%);
+  top: 75%;
+  border-radius: 29px;
+  z-index: 2;
+  box-shadow: rgba(108, 99, 255, 0.3) 0px 5px 15px 0px inset;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1) 0s;
+  
+  ${CardContainer}:hover & {
+    top: 25%;
+    border-radius: 80px 29px 29px 29px;
+    transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1) 0.2s;
+  }
+`;
+
+const Content = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 1.5rem;
+  right: 1.5rem;
+  height: 200px;
+  padding-top: 1rem;
+  
+  .name {
+    display: block;
+    font-size: 1.3rem;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .role {
+    display: block;
+    font-size: 0.9rem;
+    color: #FFD447;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+    opacity: 1;
+  }
+  
+  .about-me {
+    display: block;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-top: 0.5rem;
+    line-height: 1.5;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+  }
+  
+  ${CardContainer}:hover & {
+    top: 40px;
+    left: 1rem;
+    right: 1rem;
+    height: auto;
+    padding-top: 0.5rem;
+  }
+  
+  ${CardContainer}:hover & .name {
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+  }
+  
+  ${CardContainer}:hover & .role {
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  ${CardContainer}:hover & .about-me {
+    opacity: 1;
+    transform: translateY(0);
+    margin-top: 0;
+  }
+`;
+
+const BottomBottom = styled.div`
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+  ${CardContainer}:hover & {
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+  }
+`;
+
+const SocialLinksContainer = styled.div`
+  display: flex;
+  gap: 0.8rem;
+  opacity: 1;
+  
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  a:hover {
+    background: rgba(255, 212, 71, 0.2);
+    transform: translateY(-2px);
+  }
+  
+  svg {
+    height: 18px;
+    fill: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  a:hover svg {
+    fill: #FFD447;
+    transform: scale(1.1);
+  }
+`;
+
+const ContactButton = styled.button`
+  background: rgba(255, 255, 255, 0.9);
+  color: #6C63FF;
+  border: none;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  padding: 0.5rem 0.8rem;
+  box-shadow: rgba(108, 99, 255, 0.3) 0px 5px 10px 0px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  
+  &:hover {
+    background: #FFD447;
+    color: #0B0B1A;
+    transform: translateY(-1px);
+    box-shadow: rgba(255, 212, 71, 0.4) 0px 8px 15px 0px;
+  }
+`;
+
+// CoreMembers component - using data from teamData.js
+const members = teamData.coreTeam.map(member => ({
+  name: member.name,
+  role: member.role,
+  img: member.image,
+  bio: member.bio,
+  github: member.github !== "#" ? member.github : null,
+  linkedin: member.linkedin !== "#" ? member.linkedin : null,
+  x: member.X || null,
+  email: member.email || null,
+}));
+
+const CoreMemberCard = ({ member }: { member: any }) => {
+  return (
+    <CardContainer>
+      {member.email && (
+        <MailButton onClick={() => window.open(`mailto:${member.email}`, '_blank')}>
+          <Mail size={24} />
+        </MailButton>
+      )}
+      
+      <ProfilePic>
+        <img src={member.img} alt={member.name} />
+      </ProfilePic>
+      
+      <Bottom>
+        <Content>
+          <span className="name">{member.name}</span>
+          <span className="role">{member.role}</span>
+          <span className="about-me">{member.bio}</span>
+        </Content>
+        
+        <BottomBottom>
+          <SocialLinksContainer>
+            {member.linkedin && (
+              <a href={member.linkedin} target="_blank" rel="noopener noreferrer">
+                <Linkedin size={20} />
+              </a>
+            )}
+            {member.x && (
+              <a href={member.x} target="_blank" rel="noopener noreferrer">
+                <FaXTwitter size={20} />
+              </a>
+            )}
+            {member.github && (
+              <a href={member.github} target="_blank" rel="noopener noreferrer">
+                <Github size={20} />
+              </a>
+            )}
+          </SocialLinksContainer>
+          
+          {/* <ContactButton onClick={() => window.open(`mailto:${member.email || 'contact@cluster-vset.com'}`, '_blank')}>
+            Contact me
+          </ContactButton> */}
+        </BottomBottom>
+      </Bottom>
+    </CardContainer>
+  );
+};
+
+const CoreMembers = () => {
+  return (
+    <div className="w-full py-16">
+      {/* Enhanced Header */}
+      <div className="text-center mb-12">
+        <h2 className="text-4xl font-bold mb-4 text-gradient-primary">
+          Our Core Members
+        </h2>
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          Meet the passionate leaders driving innovation and collaboration at CLUSTER-VSET
+        </p>
+      </div>
+
+      {/* Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-6xl mx-auto px-4">
+        {members.map((member, index) => (
+          <CoreMemberCard key={index} member={member} />
+        ))}
+      </div>
+    </div>
+  );
+};
 
 const Leadership = () => {
+  // Glass effect styles
+  const glassStyles = `
+    .container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .container .glass {
+      position: relative;
+      width: 280px;
+      height: 320px;
+      background: linear-gradient(#fff2, transparent);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 25px 25px rgba(0, 0, 0, 0.25);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: 0.5s;
+      border-radius: 15px;
+      margin: 0 -30px;
+      backdrop-filter: blur(10px);
+      transform: rotate(calc(var(--r) * 1deg));
+      padding: 20px;
+    }
+
+    .container:hover .glass {
+      transform: rotate(0deg);
+      margin: 0 10px;
+    }
+
+    .container .glass::before {
+      content: attr(data-text);
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      font-weight: bold;
+      font-size: 1.1em;
+      border-radius: 0 0 15px 15px;
+    }
+    
+    .container .glass svg {
+      font-size: 3.5em;
+      fill: #fff;
+      margin-bottom: 15px;
+    }
+
+    .container .glass .description {
+      color: #fff;
+      text-align: center;
+      font-size: 0.9em;
+      line-height: 1.4;
+      margin-top: 10px;
+      opacity: 0.9;
+      max-width: 220px;
+    }
+  `;
   const TeamMemberCard = ({ member, isCore = false }: { member: any, isCore?: boolean }) => (
     <Card className="text-center hover-glow-primary transition-all duration-300 group bg-card/50">
-      <CardHeader>
-        <div className="relative h-32 mb-4 flex items-center justify-center">
-          {/* Pill-shaped background element */}
-          <div className="absolute w-48 h-24 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full blur-lg opacity-0 group-hover:opacity-60 transition-opacity duration-300" />
-
-          {/* The image itself */}
-          <img
-            src={member.image}
-            alt={member.name}
-            className="relative z-10 w-28 h-28 object-cover rounded-full border-2 border-primary/40 group-hover:border-primary transition-all duration-300 shadow-lg"
-          />
-        </div>
-        <CardTitle className="text-xl text-gradient-primary group-hover:text-gradient-secondary transition-colors">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-lg text-gradient-primary group-hover:text-gradient-secondary transition-colors">
           {member.name}
         </CardTitle>
-        <CardDescription className="font-medium text-secondary">
+        <CardDescription className="font-medium text-secondary text-sm">
           {member.role}
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
-        {member.bio && (
-          <p className="text-muted-foreground text-sm leading-relaxed">
-            {member.bio}
-          </p>
-        )}
-
-        <div className="flex justify-center space-x-3">
+      <CardContent className="pt-0">
+        <div className="flex justify-center space-x-2">
           {member.email && (
             <Button
               variant="outline"
               size="sm"
               asChild
-              className="hover:bg-primary/10"
+              className="hover:bg-primary/10 w-8 h-8 p-0"
             >
               <a href={`mailto:${member.email}`} aria-label={`Email ${member.name}`}>
-                <Mail className="w-4 h-4" />
+                <Mail className="w-3 h-3" />
               </a>
             </Button>
           )}
@@ -51,10 +437,10 @@ const Leadership = () => {
               variant="outline"
               size="sm"
               asChild
-              className="hover:bg-blue-500/10 hover:border-blue-500/50"
+              className="hover:bg-blue-500/10 hover:border-blue-500/50 w-8 h-8 p-0"
             >
               <a href={member.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${member.name}'s LinkedIn`}>
-                <Linkedin className="w-4 h-4" />
+                <Linkedin className="w-3 h-3" />
               </a>
             </Button>
           )}
@@ -63,10 +449,22 @@ const Leadership = () => {
               variant="outline"
               size="sm"
               asChild
-              className="hover:bg-gray-500/10 hover:border-gray-500/50"
+              className="hover:bg-gray-500/10 hover:border-gray-500/50 w-8 h-8 p-0"
             >
               <a href={member.github} target="_blank" rel="noopener noreferrer" aria-label={`${member.name}'s GitHub`}>
-                <Github className="w-4 h-4" />
+                <Github className="w-3 h-3" />
+              </a>
+            </Button>
+          )}
+          {member.X && (
+            <Button
+              variant="outline"
+              size="sm"
+              asChild
+              className="hover:bg-black/10 hover:border-black/50 w-8 h-8 p-0"
+            >
+              <a href={member.X} target="_blank" rel="noopener noreferrer" aria-label={`${member.name}'s X (Twitter)`}>
+                <FaXTwitter className="w-3 h-3" />
               </a>
             </Button>
           )}
@@ -84,6 +482,7 @@ const Leadership = () => {
 
   return (
     <div className="min-h-screen py-12">
+      <style dangerouslySetInnerHTML={{ __html: glassStyles }} />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-hero">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -124,53 +523,29 @@ const Leadership = () => {
         </div>
       </section>
 
-      {/* Team Members */}
+      {/* Core Members Carousel */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Tabs defaultValue="core" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-12">
-              <TabsTrigger value="core" className="text-lg py-3">
-                <Award className="w-5 h-5 mr-2" />
-                Core Team
-              </TabsTrigger>
-              <TabsTrigger value="extended" className="text-lg py-3">
-                <Users className="w-5 h-5 mr-2" />
-                Extended Team
-              </TabsTrigger>
-            </TabsList>
+          <CoreMembers />
+        </div>
+      </section>
 
-            <TabsContent value="core" className="space-y-8">
-              <div className="text-center mb-12">
-                <h2 className="text-4xl font-bold mb-4 text-gradient-primary">
-                  Core Leadership Team
-                </h2>
-                <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                  The dedicated leaders who guide our organization's strategic direction and daily operations.
-                </p>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {teamData.coreTeam.map((member) => (
-                  <TeamMemberCard key={member.id} member={member} isCore={true} />
-                ))}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="extended" className="space-y-8">
-              <div className="text-center mb-12">
-                <h2 className="text-4xl font-bold mb-4 text-gradient-secondary">
-                  Extended Team
-                </h2>
-                <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                  Our committed team members who contribute to various aspects of our organization.
-                </p>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {teamData.extendedTeam.map((member) => (
-                  <TeamMemberCard key={member.id} member={member} isCore={false} />
-                ))}
-              </div>
-            </TabsContent>
-          </Tabs>
+      {/* Extended Team Members */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4 text-gradient-secondary">
+              Extended Team
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Our committed team members who contribute to various aspects of our organization.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {teamData.extendedTeam.map((member) => (
+              <TeamMemberCard key={member.id} member={member} isCore={false} />
+            ))}
+          </div>
         </div>
       </section>
 
@@ -186,45 +561,39 @@ const Leadership = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="text-center hover-glow-primary transition-all duration-300 bg-card/70">
-              <CardHeader>
-                <Users className="w-16 h-16 mx-auto mb-4 text-primary" />
-                <CardTitle className="text-2xl">Collaborative Leadership</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="text-muted-foreground text-lg leading-relaxed">
-                  We believe in shared leadership where every voice matters and decisions are made collectively
-                  for the benefit of our entire community.
-                </CardDescription>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center hover-glow-primary transition-all duration-300 bg-card/70">
-              <CardHeader>
-                <Target className="w-16 h-16 mx-auto mb-4 text-secondary" />
-                <CardTitle className="text-2xl">Mission-Driven</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="text-muted-foreground text-lg leading-relaxed">
-                  Every decision we make is guided by our commitment to advancing collaborative learning
-                  and innovative research in our academic community.
-                </CardDescription>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center hover-glow-primary transition-all duration-300 bg-card/70">
-              <CardHeader>
-                <Zap className="w-16 h-16 mx-auto mb-4 text-accent" />
-                <CardTitle className="text-2xl">Empowerment Focus</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="text-muted-foreground text-lg leading-relaxed">
-                  We strive to empower every member to reach their potential and contribute meaningfully
-                  to research and academic excellence.
-                </CardDescription>
-              </CardContent>
-            </Card>
+          <div className="flex justify-center">
+            <div className="container">
+              <div data-text="Collaborate" style={{ "--r": -15 } as React.CSSProperties} className="glass">
+                <svg viewBox="0 0 640 512" height="1em" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M144 0a48 48 0 1 0 0 96 48 48 0 1 0 0-96zM96 160a64 64 0 1 1 128 0A64 64 0 1 1 96 160zM48 224H192c0 17.7 14.3 32 32 32s32-14.3 32-32H384c0 17.7 14.3 32 32 32s32-14.3 32-32H544c17.7 0 32 14.3 32 32s-14.3 32-32 32H480c0 53-43 96-96 96s-96-43-96-96H256c0 53-43 96-96 96s-96-43-96-96H48c-17.7 0-32-14.3-32-32s14.3-32 32-32z"
+                  ></path>
+                </svg>
+                <div className="description">
+                  We believe in shared leadership where every voice matters and decisions are made collectively for the benefit of our entire community.
+                </div>
+              </div>
+              <div data-text="Innovate" style={{ "--r": 5 } as React.CSSProperties} className="glass">
+                <svg viewBox="0 0 640 512" height="1em" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M392.8 1.2c-17-4.9-34.7 5-39.6 22l-128 448c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l128-448c4.9-17-5-34.7-22-39.6zm80.6 120.1c-12.5 12.5-12.5 32.8 0 45.3L562.7 256l-89.4 89.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l112-112c12.5-12.5 12.5-32.8 0-45.3l-112-112c-12.5-12.5-32.8-12.5-45.3 0zm-306.7 0c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3l112 112c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256l89.4-89.4c12.5-12.5 12.5-32.8 0-45.3z"
+                  ></path>
+                </svg>
+                <div className="description">
+                  Every decision we make is guided by our commitment to advancing collaborative learning and innovative research in our academic community.
+                </div>
+              </div>
+              <div data-text="Empower" style={{ "--r": 25 } as React.CSSProperties} className="glass">
+                <svg viewBox="0 0 576 512" height="1em" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M64 64C28.7 64 0 92.7 0 128V384c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H64zm64 320H64V320c35.3 0 64 28.7 64 64zM64 192V128h64c0 35.3-28.7 64-64 64zM448 384c0-35.3 28.7-64 64-64v64H448zm64-192c-35.3 0-64-28.7-64-64h64v64zM288 160a96 96 0 1 1 0 192 96 96 0 1 1 0-192z"
+                  ></path>
+                </svg>
+                <div className="description">
+                  We strive to empower every member to reach their potential and contribute meaningfully to research and academic excellence.
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

@@ -164,7 +164,20 @@ const Blog = () => {
       {/* Featured Posts */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          {/* Coming Soon Message */}
+          <div className="text-center py-32">
+            <User className="w-24 h-24 mx-auto mb-8 text-muted-foreground" />
+            <h2 className="text-4xl font-bold text-gradient-primary mb-4">
+              Blog Coming Soon
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              We're working on bringing you insightful articles, research findings, and tutorials. 
+              Check back soon for engaging content from our community of data scientists and researchers.
+            </p>
+          </div>
+          
+          {/* Original Blog Display - Commented Out */}
+          {/* <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">
               <span className="text-gradient-primary">Latest</span>
               <span className="text-foreground"> Articles</span>
@@ -178,12 +191,12 @@ const Blog = () => {
             {blogsData.map((post) => (
               <BlogCard key={post.id} post={post} />
             ))}
-          </div>
+          </div> */}
         </div>
       </section>
 
-      {/* Categories */}
-      <section className="py-20 bg-card/30">
+      {/* Categories - Commented Out */}
+      {/* <section className="py-20 bg-card/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4 text-gradient-secondary">
@@ -218,7 +231,7 @@ const Blog = () => {
             })}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Call to Action */}
       <section className="py-20">

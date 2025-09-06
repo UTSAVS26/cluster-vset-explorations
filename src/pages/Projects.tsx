@@ -123,8 +123,21 @@ const Projects = () => {
       {/* Projects Content */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Coming Soon Message */}
+          <div className="text-center py-32">
+            <Code className="w-24 h-24 mx-auto mb-8 text-muted-foreground" />
+            <h2 className="text-4xl font-bold text-gradient-primary mb-4">
+              Projects Coming Soon
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              We're currently working on showcasing our amazing research projects. 
+              Check back soon to explore our cutting-edge work in data science and collaborative research.
+            </p>
+          </div>
+          
+          {/* Original Projects Display - Commented Out */}
           {/* Category Filter */}
-          <div className="mb-12">
+          {/* <div className="mb-12">
             <div className="flex items-center gap-4 mb-6">
               <Filter className="w-5 h-5 text-muted-foreground" />
               <h3 className="text-lg font-semibold text-foreground">Filter by Category</h3>
@@ -142,31 +155,29 @@ const Projects = () => {
                 </Button>
               ))}
             </div>
-          </div>
+          </div> */}
 
           {/* Projects Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredProjects.map((project) => (
               <ProjectCard key={project.id} project={project} />
             ))}
-          </div>
+          </div> */}
 
-          {filteredProjects.length === 0 && (
-            <div className="text-center py-16">
-              <Code className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-              <h3 className="text-2xl font-semibold text-muted-foreground mb-2">
-                No Projects Found
-              </h3>
-              <p className="text-muted-foreground">
-                Try selecting a different category or check back later for new projects.
-              </p>
-            </div>
-          )}
+          {/* <div className="text-center py-16">
+            <Code className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+            <h3 className="text-2xl font-semibold text-muted-foreground mb-2">
+              No Projects Found
+            </h3>
+            <p className="text-muted-foreground">
+              Try selecting a different category or check back later for new projects.
+            </p>
+          </div> */}
         </div>
       </section>
 
-      {/* Project Stats */}
-      <section className="py-20 bg-card/30">
+      {/* Project Stats - Commented Out */}
+      {/* <section className="py-20 bg-card/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4 text-gradient-secondary">
@@ -204,7 +215,7 @@ const Projects = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Call to Action */}
       <section className="py-20">

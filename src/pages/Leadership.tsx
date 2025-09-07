@@ -10,6 +10,13 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Declare VANTA type for TypeScript
+declare global {
+  interface Window {
+    VANTA: any;
+  }
+}
+
 // Styled Components for Uiverse.io Card Design
 const CardContainer = styled.div`
   width: 336px;
@@ -348,6 +355,8 @@ const CoreMembers = () => {
 const Leadership = () => {
   const [selectedMember, setSelectedMember] = useState(null);
   const statsRef = useRef(null);
+  const vantaRef = useRef(null);
+  const [vantaEffect, setVantaEffect] = useState(null);
 
   useEffect(() => {
     const statsElements = statsRef.current?.querySelectorAll('.stat-number');
@@ -378,6 +387,42 @@ const Leadership = () => {
       });
     }
   }, []);
+
+  useEffect(() => {
+    const initVanta = () => {
+      if (!vantaEffect && vantaRef.current && window.VANTA && window.VANTA.TOPOLOGY) {
+        try {
+          setVantaEffect(
+            window.VANTA.TOPOLOGY({
+              el: vantaRef.current,
+              mouseControls: true,
+              touchControls: true,
+              gyroControls: false,
+              minHeight: 200.00,
+              minWidth: 200.00,
+              scale: 1.00,
+              scaleMobile: 1.00,
+              color: 0x4e8596,
+              backgroundColor: 0x1d0838
+            })
+          );
+        } catch (error) {
+          console.log('Vanta topology initialization failed:', error);
+        }
+      }
+    };
+
+    // Try to initialize immediately
+    initVanta();
+
+    // If not available, try again after a short delay
+    const timer = setTimeout(initVanta, 1000);
+
+    return () => {
+      clearTimeout(timer);
+      if (vantaEffect) vantaEffect.destroy();
+    };
+  }, [vantaEffect]);
 
   // Glass effect styles
   const glassStyles = `
@@ -581,10 +626,10 @@ const Leadership = () => {
   ];
 
   return (
-    <div className="min-h-screen py-12">
+    <div className="min-h-screen ">
       <style dangerouslySetInnerHTML={{ __html: glassStyles }} />
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-hero">
+      <section ref={vantaRef} className="py-20 bg-gradient-hero relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-5xl md:text-6xl font-bold mb-6">

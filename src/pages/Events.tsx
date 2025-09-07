@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, Clock, MapPin, Users, ExternalLink, Tag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -7,15 +7,59 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { eventsData } from '@/data/eventsData';
 
+// Declare VANTA type for TypeScript
+declare global {
+  interface Window {
+    VANTA: any;
+  }
+}
+
 const Events = () => {
   const [activeTab, setActiveTab] = useState('upcoming');
   const [isVisible, setIsVisible] = useState(false);
+  const vantaRef = useRef(null);
+  const [vantaEffect, setVantaEffect] = useState(null);
   const upcomingEvents = eventsData.filter(event => event.type === 'upcoming');
   const pastEvents = eventsData.filter(event => event.type === 'past');
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
+
+  useEffect(() => {
+    const initVanta = () => {
+      if (!vantaEffect && vantaRef.current && window.VANTA && window.VANTA.WAVES) {
+        try {
+          setVantaEffect(
+            window.VANTA.WAVES({
+              el: vantaRef.current,
+              mouseControls: true,
+              touchControls: true,
+              gyroControls: false,
+              minHeight: 200.00,
+              minWidth: 200.00,
+              scale: 1.00,
+              scaleMobile: 1.00,
+              color: 0x180060
+            })
+          );
+        } catch (error) {
+          console.log('Vanta initialization failed:', error);
+        }
+      }
+    };
+
+    // Try to initialize immediately
+    initVanta();
+
+    // If not available, try again after a short delay
+    const timer = setTimeout(initVanta, 1000);
+
+    return () => {
+      clearTimeout(timer);
+      if (vantaEffect) vantaEffect.destroy();
+    };
+  }, [vantaEffect]);
 
   const EventCard = ({ event, isUpcoming = true, index = 0 }: { event: any, isUpcoming?: boolean, index?: number }) => (
     <div 
@@ -27,14 +71,7 @@ const Events = () => {
         animation: isVisible ? 'slideInUp 0.6s ease-out forwards' : 'none'
       }}
     >
-      <div className="group h-full particle-container">
-        {/* Particle Effects */}
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        
+      <div className="group h-full">
         <Card className="hover-glow-primary transition-all duration-300 bg-card/50 h-full group-hover:-translate-y-2 group-hover:scale-[1.02] group-hover:shadow-xl glow-card card-3d glass-effect hover-lift">
           <div className="aspect-video overflow-hidden rounded-t-lg relative">
             <img
@@ -145,20 +182,9 @@ const Events = () => {
   );
 
   return (
-    <div className="min-h-screen py-12">
+    <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-hero relative overflow-hidden">
-        {/* Floating particles in background */}
-        <div className="absolute inset-0 particle-container">
-          <div className="particle"></div>
-          <div className="particle"></div>
-          <div className="particle"></div>
-          <div className="particle"></div>
-          <div className="particle"></div>
-          <div className="particle"></div>
-          <div className="particle"></div>
-          <div className="particle"></div>
-        </div>
+      <section ref={vantaRef} className="pt-20 pb-20 bg-gradient-hero relative overflow-hidden" style={{ marginTop: '0px' }}>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center">
@@ -281,13 +307,6 @@ const Events = () => {
 
       {/* Call to Action */}
       <section className="py-20 bg-card/30 relative overflow-hidden">
-        {/* Background particles */}
-        <div className="absolute inset-0 particle-container">
-          <div className="particle"></div>
-          <div className="particle"></div>
-          <div className="particle"></div>
-          <div className="particle"></div>
-        </div>
         
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <h2 

@@ -1,8 +1,58 @@
-import { Mail, MessageCircle, Instagram, Linkedin, Github, MessageSquare, MapPin, Twitter } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useState, useEffect, useRef } from 'react';
+import { Mail, MapPin, Phone, MessageCircle, Send, ExternalLink, Instagram, Linkedin, Github, MessageSquare, Twitter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+
+// Declare VANTA type for TypeScript
+declare global {
+  interface Window {
+    VANTA: any;
+  }
+}
 
 const Contact = () => {
+  const vantaRef = useRef(null);
+  const [vantaEffect, setVantaEffect] = useState(null);
+
+  useEffect(() => {
+    const initVanta = () => {
+      if (!vantaEffect && vantaRef.current && window.VANTA && window.VANTA.FOG) {
+        try {
+          setVantaEffect(
+            window.VANTA.FOG({
+              el: vantaRef.current,
+              mouseControls: true,
+              touchControls: true,
+              gyroControls: false,
+              minHeight: 200.00,
+              minWidth: 200.00,
+              highlightColor: 0xf023b,
+              midtoneColor: 0x3248cf,
+              lowlightColor: 0xca45c2,
+              baseColor: 0xa001a
+            })
+          );
+        } catch (error) {
+          console.log('Vanta fog initialization failed:', error);
+        }
+      }
+    };
+
+    // Try to initialize immediately
+    initVanta();
+
+    // If not available, try again after a short delay
+    const timer = setTimeout(initVanta, 1000);
+
+    return () => {
+      clearTimeout(timer);
+      if (vantaEffect) vantaEffect.destroy();
+    };
+  }, [vantaEffect]);
+
   const socialLinks = [
     { 
       name: 'WhatsApp', 
@@ -64,9 +114,9 @@ const Contact = () => {
   ];
 
   return (
-    <div className="min-h-screen py-12">
+    <div className="min-h-screen ">
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-hero">
+      <section ref={vantaRef} className="py-20 bg-gradient-hero relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-5xl md:text-6xl font-bold mb-6">

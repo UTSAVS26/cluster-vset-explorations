@@ -144,7 +144,7 @@ const Blog = () => {
   }
 
   return (
-    <div className="min-h-screen py-12">
+    <div className="min-h-screen">
       {/* Hero Section */}
       <section className="py-20 bg-gradient-hero">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

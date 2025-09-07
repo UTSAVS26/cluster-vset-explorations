@@ -4,7 +4,6 @@ import { MessageCircle, Instagram, Linkedin, Github, MessageSquare, Twitter } fr
 const Footer = () => {
   const navItems = [
     { name: 'Home', path: '/' },
-    { name: 'About', path: '/about' },
     { name: 'Events', path: '/events' },
     { name: 'Projects', path: '/projects' },
   ];
@@ -26,7 +25,7 @@ const Footer = () => {
     {
       name: 'Instagram',
       icon: Instagram,
-      url: 'https://www.instagram.com/cluster_vips/',
+      url: 'https://www.instagram.com/dsclub.vips/',
       color: 'hover:text-pink-400'
     },
     {

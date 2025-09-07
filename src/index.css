@@ -342,7 +342,7 @@
   }
 
   .btn-neon-secondary {
-    background: linear-gradient(135deg, #4ECDC4, #44A08D);
+    background: linear-gradient(135deg, #634ecd, #8044a0);
     color: white;
     border: 1px solid rgba(78, 205, 196, 0.5);
     box-shadow: 0 0 20px rgba(78, 205, 196, 0.4);
@@ -350,8 +350,8 @@
   }
 
   .btn-neon-secondary:hover {
-    background: linear-gradient(135deg, #26D0CE, #1FA2A1);
-    box-shadow: 0 0 30px rgba(78, 205, 196, 0.6), 0 0 50px rgba(78, 205, 196, 0.3);
+    background: linear-gradient(135deg, #a168fb, #d6c7fb);
+    box-shadow: 0 0 30px rgba(254, 255, 255, 0.6), 0 0 50px rgba(255, 255, 255, 0.3);
     transform: translateY(-2px);
   }
   

@@ -2,9 +2,13 @@ import { Mail, Linkedin, Github, Users, Award, Target, Zap } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { teamData } from '@/data/teamData';
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled from 'styled-components';
 import { FaTwitter, FaInstagram, FaXTwitter } from "react-icons/fa6";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 // Styled Components for Uiverse.io Card Design
 const CardContainer = styled.div`
@@ -309,9 +313,9 @@ const CoreMemberCard = ({ member }: { member: any }) => {
             )}
           </SocialLinksContainer>
           
-          {/* <ContactButton onClick={() => window.open(`mailto:${member.email || 'contact@cluster-vset.com'}`, '_blank')}>
-            Contact me
-          </ContactButton> */}
+          <div className="text-xs text-white/70 font-medium tracking-wide">
+            Hover here to know more
+          </div>
         </BottomBottom>
       </Bottom>
     </CardContainer>
@@ -342,6 +346,39 @@ const CoreMembers = () => {
 };
 
 const Leadership = () => {
+  const [selectedMember, setSelectedMember] = useState(null);
+  const statsRef = useRef(null);
+
+  useEffect(() => {
+    const statsElements = statsRef.current?.querySelectorAll('.stat-number');
+    
+    if (statsElements) {
+      statsElements.forEach((element, index) => {
+        const finalValue = element.textContent;
+        const numericValue = parseInt(finalValue.replace(/\D/g, ''));
+        
+        // Set initial value to 0
+        element.textContent = '0' + (finalValue.includes('+') ? '+' : '');
+        
+        gsap.to(element, {
+          textContent: finalValue,
+          duration: 2,
+          ease: "power2.out",
+          delay: index * 0.2,
+          onUpdate: function() {
+            const currentValue = Math.round(this.progress() * numericValue);
+            element.textContent = currentValue + (finalValue.includes('+') ? '+' : '');
+          },
+          scrollTrigger: {
+            trigger: element,
+            start: "top 80%",
+            toggleActions: "play none none reverse"
+          }
+        });
+      });
+    }
+  }, []);
+
   // Glass effect styles
   const glassStyles = `
     .container {
@@ -474,10 +511,10 @@ const Leadership = () => {
   );
 
   const organizationStats = [
-    { icon: Users, label: 'Total Members', value: `${teamData.coreTeam.length + teamData.extendedTeam.length}+`, color: 'text-blue-400' },
-    { icon: Award, label: 'Years Active', value: '4+', color: 'text-green-400' },
-    { icon: Target, label: 'Projects Led', value: '25+', color: 'text-purple-400' },
-    { icon: Zap, label: 'Events Organized', value: '50+', color: 'text-orange-400' }
+    { icon: Users, label: 'Total Members', value: `100+`, color: 'text-blue-400' },
+    { icon: Award, label: 'Years Active', value: '1+', color: 'text-green-400' },
+    { icon: Target, label: 'Projects Led', value: '30+', color: 'text-purple-400' },
+    { icon: Zap, label: 'Events Organized', value: '5+', color: 'text-orange-400' }
   ];
 
   return (
@@ -500,16 +537,21 @@ const Leadership = () => {
       </section>
 
       {/* Organization Stats */}
-      <section className="py-20">
+      <section className="py-20" ref={statsRef}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16">
             {organizationStats.map((stat, index) => {
               const IconComponent = stat.icon;
               return (
-                <Card key={index} className="text-center hover-glow-primary transition-all duration-300 bg-card/50">
+                <Card
+                  key={index}
+                  className="text-center hover-glow-primary transition-all duration-300 
+                             bg-gradient-to-br from-purple-900/80 via-blue-900/70 to-cyan-900/60 
+                             border border-purple-800/50 backdrop-blur-sm shadow-lg"
+                >
                   <CardContent className="pt-6">
                     <IconComponent className={`w-12 h-12 mx-auto mb-4 ${stat.color}`} />
-                    <div className="text-3xl font-bold text-gradient-primary mb-2">
+                    <div className="text-3xl font-bold text-gradient-primary mb-2 stat-number">
                       {stat.value}
                     </div>
                     <p className="text-muted-foreground text-sm font-medium">
@@ -524,7 +566,7 @@ const Leadership = () => {
       </section>
 
       {/* Core Members Carousel */}
-      <section className="py-20">
+      <section className="pt-0 pb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <CoreMembers />
         </div>

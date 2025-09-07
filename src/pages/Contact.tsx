@@ -14,7 +14,7 @@ const Contact = () => {
     { 
       name: 'Instagram', 
       icon: Instagram, 
-      url: 'https://www.instagram.com/cluster_vips/',
+      url: 'https://www.instagram.com/dsclub.vips/',
       description: 'Follow us for event photos and behind-the-scenes content',
       color: 'bg-pink-500/10 text-pink-400 border-pink-500/20 hover:bg-pink-500/20' 
     },

@@ -18,7 +18,6 @@ import ClickSpark from '@/components/ClickSpark';
 import image1 from '@/assets/1.jpg';
 import image2 from '@/assets/2.jpeg';
 import image3 from '@/assets/3.jpeg';
-import image4 from '@/assets/4.jpeg';
  
 
 const Index = () => {
@@ -110,14 +109,25 @@ const Index = () => {
   // Slider navigation function
   const scroll = (direction: "left" | "right") => {
     if (!sliderRef.current) return;
-    const card = sliderRef.current.querySelector<HTMLLIElement>(".expanding-card-item");
-    if (!card) return;
-
-    const cardWidth = card.offsetWidth + 16; // width + gap
-    sliderRef.current.scrollBy({
-      left: direction === "left" ? -cardWidth : cardWidth,
-      behavior: "smooth",
-    });
+    
+    const currentScroll = sliderRef.current.scrollLeft;
+    const maxScroll = sliderRef.current.scrollWidth - sliderRef.current.clientWidth;
+    
+    if (direction === "left") {
+      // Scroll to previous card or beginning
+      const newPosition = Math.max(0, currentScroll - 300);
+      sliderRef.current.scrollTo({
+        left: newPosition,
+        behavior: "smooth",
+      });
+    } else {
+      // Scroll to next card or end
+      const newPosition = Math.min(maxScroll, currentScroll + 300);
+      sliderRef.current.scrollTo({
+        left: newPosition,
+        behavior: "smooth",
+      });
+    }
   };
 
      // Expanding cards styles and PhotoStack animations
@@ -172,8 +182,8 @@ const Index = () => {
       transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
     
-    /* Desktop: Expanding cards layout */
-    @media (min-width: 1280px) {
+    /* Desktop and Tablet: Expanding cards layout */
+    @media (min-width: 768px) {
       .expanding-cards-grid {
         grid-template-columns: 10fr 1fr 1fr 1fr 1fr 1fr 1fr;
         height: clamp(500px, 60dvh, 700px);
@@ -181,17 +191,8 @@ const Index = () => {
       }
     }
     
-    /* Tablet: 3 columns */
-    @media (min-width: 1024px) and (max-width: 1279px) {
-      .expanding-cards-grid {
-        grid-template-columns: repeat(3, 1fr);
-        height: auto;
-        gap: 16px;
-      }
-    }
-    
-    /* Small tablet: 2 columns */
-    @media (min-width: 640px) and (max-width: 1023px) {
+    /* Small tablet: 2 columns minimum */
+    @media (min-width: 640px) and (max-width: 767px) {
       .expanding-cards-grid {
         grid-template-columns: repeat(2, 1fr);
         height: auto;
@@ -199,20 +200,17 @@ const Index = () => {
       }
     }
     
-    /* Mobile: Horizontal slider */
+    /* Mobile: Stacked cards layout */
     @media (max-width: 639px) {
       .expanding-cards-grid {
-        display: flex;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        gap: 16px;
+        display: block !important;
+        position: relative;
         padding: 0 16px;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-      }
-      
-      .expanding-cards-grid::-webkit-scrollbar {
-        display: none;
+        width: 100%;
+        max-width: none;
+        grid-template-columns: none !important;
+        height: auto;
+        overflow: visible !important;
       }
     }
 
@@ -225,7 +223,33 @@ const Index = () => {
       border-radius: 16px;
       border: 1px solid rgba(255, 255, 255, 0.2);
       cursor: pointer;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .card-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      border-radius: 16px;
+      z-index: 0;
+    }
+
+    .expanding-card-item::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 16px;
+      pointer-events: none;
+      z-index: 1;
     }
     
     /* Desktop card sizing */
@@ -248,22 +272,58 @@ const Index = () => {
       }
     }
     
-    /* Mobile slider card styling */
+    /* Mobile: Stacked cards */
     @media (max-width: 639px) {
       .expanding-card-item {
-        min-width: calc(100vw - 80px);
-        max-width: 320px;
-        min-height: 200px;
-        padding: 20px;
+        position: sticky;
+        top: 20px;
+        width: calc(100% - 32px);
+        min-height: 280px;
+        max-height: 320px;
+        margin: 0 auto 20px auto;
+        padding: 16px;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         text-align: center;
-        flex-shrink: 0;
-        scroll-snap-align: center;
         background: rgba(255, 255, 255, 0.15);
         border: 1px solid rgba(255, 255, 255, 0.3);
+        transform: none !important;
+        z-index: var(--stack-index, 1);
+        overflow: hidden;
+      }
+      
+      /* Reverse z-index order so new cards overlap older ones */
+      .expanding-card-item:nth-child(1) { --stack-index: 1; }
+      .expanding-card-item:nth-child(2) { --stack-index: 2; }
+      .expanding-card-item:nth-child(3) { --stack-index: 3; }
+      .expanding-card-item:nth-child(4) { --stack-index: 4; }
+      .expanding-card-item:nth-child(5) { --stack-index: 5; }
+      .expanding-card-item:nth-child(6) { --stack-index: 6; }
+      .expanding-card-item:nth-child(7) { --stack-index: 7; }
+      
+      .expanding-card-item:hover {
+        transform: none !important;
+      }
+      
+      /* Mobile card text styling */
+      .expanding-card-item article h3 {
+        font-size: 1rem !important;
+        font-weight: 600;
+        margin-bottom: 8px !important;
+        line-height: 1.2;
+      }
+      
+      .expanding-card-item article p {
+        font-size: 0.8rem !important;
+        line-height: 1.3 !important;
+        margin: 0 !important;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 6;
+        -webkit-box-orient: vertical;
+        text-overflow: ellipsis;
       }
     }
 
@@ -282,12 +342,15 @@ const Index = () => {
     }
 
     .expanding-card-item:hover {
-      transform: translateY(-8px) scale(1.02);
+      transform: translateY(-8px);
       box-shadow: 
         0 25px 50px rgba(0, 0, 0, 0.15),
         0 0 0 1px rgba(255, 255, 255, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.3);
       border-color: rgba(255, 255, 255, 0.4);
+      background-size: cover !important;
+      background-position: center !important;
+      background-attachment: scroll !important;
     }
 
     .expanding-card-item:hover::before {
@@ -308,6 +371,7 @@ const Index = () => {
       padding-inline: calc(clamp(3rem, 10cqi, 120px) * 0.5 - 12px);
       padding-bottom: 3rem;
       overflow: hidden;
+      z-index: 2;
     }
 
 
@@ -319,15 +383,8 @@ const Index = () => {
       transition-delay: 0.15s;
     }
 
-    /* Mobile/Tablet: Show all content without hover */
-    @media (max-width: 1023px) {
-      .expanding-cards-grid {
-        grid-template-columns: 1fr;
-        height: auto;
-        gap: 1rem;
-        width: 100%;
-      }
-      
+    /* Small tablet only: Show all content without hover */
+    @media (min-width: 640px) and (max-width: 767px) {
       .expanding-card-item {
         min-height: 250px;
         background: rgba(255, 255, 255, 0.08);
@@ -336,6 +393,11 @@ const Index = () => {
         border-radius: 1rem;
         padding: 1.25rem;
         transition: none;
+        transform: none !important;
+      }
+      
+      .expanding-card-item:hover {
+        transform: none !important;
       }
       
       .expanding-card-item article {
@@ -347,12 +409,38 @@ const Index = () => {
         visibility: visible;
         position: static;
         transform: none;
+        z-index: 2;
       }
       
       .expanding-card-item article h3 {
         font-size: 1.1rem;
         font-weight: 600;
-        color: #6C63FF;
+        color:rgb(255, 255, 255);
+        margin-bottom: 0.75rem;
+        position: static;
+        transform: none;
+        rotate: 0deg;
+      }
+    }
+
+    /* Mobile: Show all content with red headings */
+    @media (max-width: 639px) {
+      .expanding-card-item article {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        text-align: center;
+        opacity: 1;
+        visibility: visible;
+        position: static;
+        transform: none;
+        z-index: 2;
+      }
+      
+      .expanding-card-item article h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color:rgb(251, 249, 249);
         margin-bottom: 0.75rem;
         position: static;
         transform: none;
@@ -381,7 +469,7 @@ const Index = () => {
       
     }
     
-    /* Desktop: Hide content until hover */
+    /* Desktop: Show content only when active */
     @media (min-width: 1024px) {
       .expanding-card-item article p {
         opacity: 0;
@@ -389,7 +477,7 @@ const Index = () => {
         transition: all 0.3s ease;
       }
       
-      .expanding-card-item:hover article p {
+      .expanding-card-item[data-active='true'] article p {
         opacity: 1;
         visibility: visible;
       }
@@ -460,12 +548,21 @@ const Index = () => {
       list.style.setProperty("--article-width", w.toString());
     };
 
+    // Set initial scroll position for mobile to start at beginning
+    const setInitialScroll = () => {
+      if (window.innerWidth <= 639 && sliderRef.current) {
+        // Start at the very beginning to show first card
+        sliderRef.current.scrollLeft = 0;
+      }
+    };
+
     list.addEventListener("focus", setIndex, true);
     list.addEventListener("click", setIndex);
     list.addEventListener("pointermove", setIndex);
     window.addEventListener("resize", resync);
 
     resync();
+    setTimeout(setInitialScroll, 100); // Delay to ensure DOM is ready
 
     return () => {
       list.removeEventListener("focus", setIndex, true);
@@ -570,14 +667,10 @@ const Index = () => {
               </div>
               <div className="w-full text-left story-content">
                 <p className="text-lg lg:text-xl text-white/90 font-inter mb-6 leading-relaxed gsap-text-reveal">
-                  CLUSTER-VSET was founded in 2020 with a vision to create a vibrant community of data science enthusiasts and researchers.
-                  Since then, we have grown to become one of the most active and influential student organizations on campus,
-                  fostering a culture of innovation, collaboration, and academic excellence.
+                CLUSTER-VSET is a student-led club at VSET, founded in 2025, with the mission to empower students in data science and related fields. Our goal is to help students build meaningful projects, find the right community, and gain guidance through mentorship, events, and knowledge-sharing sessions.
                 </p>
                 <p className="text-lg lg:text-xl text-white/90 font-inter leading-relaxed gsap-text-reveal">
-                  Our journey began with a simple idea: to provide students with the resources, mentorship, and opportunities
-                  to excel in data science and statistics. Today, we stand as a testament to the power of collective effort
-                  and the transformative impact of a supportive community.
+                We believe in fostering a culture of collaboration, learning, and innovation, connecting students with peers, experts, and resources to help them grow academically and professionally. Whether you are exploring data science for the first time or looking to refine your skills, CLUSTER-VSET provides the platform to learn, create, and thrive.
                 </p>
               </div>
             </div>
@@ -635,21 +728,6 @@ const Index = () => {
           </motion.div>
 
           <div className="relative w-full">
-            {/* Left Arrow (only visible on mobile) */}
-            <button
-              onClick={() => scroll("left")}
-              className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black/50 text-white rounded-full p-2 hover:bg-black/70 transition md:hidden"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-
-            {/* Right Arrow (only visible on mobile) */}
-            <button
-              onClick={() => scroll("right")}
-              className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-black/50 text-white rounded-full p-2 hover:bg-black/70 transition md:hidden"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
 
             <ul
               ref={sliderRef}
@@ -661,60 +739,62 @@ const Index = () => {
               desc: "Join our regular workshops, seminars, and research symposiums to expand your knowledge and network. Connect with experts, learn new skills, and build lasting relationships with fellow researchers.",
               active: true,
               link: "/events",
-              icon: Calendar
+              bgImage: "/expandingcards/bg_1.png"
             },
             {
               title: "Cutting-edge Projects",
               desc: "Collaborate on real-world data science projects that make a difference in academic research. Work on innovative solutions that address real challenges in various fields.",
               active: false,
               link: "/projects",
-              icon: Zap
+              bgImage: "/expandingcards/bg_2.png"
             },
             {
               title: "Learning Resources",
               desc: "Access our curated collection of guides, tools, and datasets for your research journey. From beginner tutorials to advanced methodologies, we have resources for every level.",
               active: false,
               link: "/resources",
-              icon: BookOpen
+              bgImage: "/expandingcards/bg_3.png"
             },
             {
               title: "Research Community",
               desc: "Connect with like-minded researchers and collaborate on groundbreaking academic projects. Build your network and contribute to meaningful research initiatives.",
               active: false,
               link: "/leadership",
-              icon: Users
+              bgImage: "/expandingcards/bg_4.png"
             },
             {
               title: "Innovation Hub",
               desc: "Explore cutting-edge technologies and methodologies in data science. Stay ahead of the curve with the latest trends and developments in the field.",
               active: false,
               link: "/projects",
-              icon: Zap
+              bgImage: "/expandingcards/bg_5.png"
             },
             {
               title: "Academic Excellence",
               desc: "Strive for academic excellence through rigorous research practices and collaborative learning. Develop skills that will set you apart in your academic and professional journey.",
               active: false,
               link: "/about",
-              icon: BookOpen
+              bgImage: "/expandingcards/bg_6.png"
             },
             {
               title: "Future Leaders",
               desc: "Develop leadership skills and prepare for future roles in academia and industry. Take on responsibilities that will shape the next generation of researchers.",
               active: false,
               link: "/leadership",
-              icon: Users
+              bgImage: "/expandingcards/bg_7.png"
             }].map((item, idx) => {
-              const IconComponent = item.icon;
               return (
                 <li
                   key={idx}
                   data-active={item.active}
                   className="expanding-card-item"
                 >
+                  <div 
+                    className="card-background"
+                    style={{ backgroundImage: `url(${item.bgImage})` }}
+                  ></div>
                   <article>
                     <h3>{item.title}</h3>
-                    <IconComponent />
                     <p>{item.desc}</p>
                   </article>
                 </li>
@@ -778,7 +858,7 @@ const Index = () => {
               >
                 <Button variant="outline" size="xl" asChild className="btn-neon-secondary border-secondary hover:border-secondary-glow hover:bg-secondary/10">
                   <a 
-                    href="https://github.com/cluster-vset" 
+                    href="https://github.com/CLUSTER-DS-Club/" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="flex items-center"

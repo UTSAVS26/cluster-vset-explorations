@@ -387,6 +387,7 @@ const Leadership = () => {
       justify-content: center;
       align-items: center;
       gap: 20px;
+      flex-wrap: wrap;
     }
 
     .container .glass {
@@ -443,6 +444,68 @@ const Leadership = () => {
       margin-top: 10px;
       opacity: 0.9;
       max-width: 220px;
+    }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        gap: 30px;
+        padding: 0 20px;
+      }
+
+      .container .glass {
+        width: 100%;
+        max-width: 320px;
+        height: 280px;
+        margin: 0;
+        transform: rotate(0deg) !important;
+        padding: 24px 20px;
+      }
+
+      .container:hover .glass {
+        margin: 0;
+        transform: rotate(0deg);
+      }
+
+      .container .glass::before {
+        height: 45px;
+        font-size: 1em;
+      }
+
+      .container .glass svg {
+        font-size: 2.8em;
+        margin-bottom: 12px;
+      }
+
+      .container .glass .description {
+        font-size: 0.85em;
+        line-height: 1.5;
+        max-width: 100%;
+        padding: 0 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container .glass {
+        height: 260px;
+        padding: 20px 16px;
+      }
+
+      .container .glass::before {
+        height: 40px;
+        font-size: 0.9em;
+      }
+
+      .container .glass svg {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+      }
+
+      .container .glass .description {
+        font-size: 0.8em;
+        line-height: 1.4;
+      }
     }
   `;
   const TeamMemberCard = ({ member, isCore = false }: { member: any, isCore?: boolean }) => (
@@ -592,13 +655,13 @@ const Leadership = () => {
       </section>
 
       {/* Leadership Philosophy */}
-      <section className="py-20 bg-card/30">
+      <section className="py-16 md:py-20 bg-card/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-gradient-primary">
+          <div className="text-center mb-12 md:mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-3 md:mb-4 text-gradient-primary">
               Our Leadership Philosophy
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto px-4">
               The principles that guide how we lead and serve our community
             </p>
           </div>

@@ -342,7 +342,7 @@
   }
 
   .btn-neon-secondary {
-    background: linear-gradient(135deg, #4ECDC4, #44A08D);
+    background: linear-gradient(135deg, #634ecd, #8044a0);
     color: white;
     border: 1px solid rgba(78, 205, 196, 0.5);
     box-shadow: 0 0 20px rgba(78, 205, 196, 0.4);
@@ -350,8 +350,8 @@
   }
 
   .btn-neon-secondary:hover {
-    background: linear-gradient(135deg, #26D0CE, #1FA2A1);
-    box-shadow: 0 0 30px rgba(78, 205, 196, 0.6), 0 0 50px rgba(78, 205, 196, 0.3);
+    background: linear-gradient(135deg, #a168fb, #d6c7fb);
+    box-shadow: 0 0 30px rgba(254, 255, 255, 0.6), 0 0 50px rgba(255, 255, 255, 0.3);
     transform: translateY(-2px);
   }
   
@@ -375,6 +375,7 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    color: #d6c7fb;
   }
   
   .text-gradient-secondary {
@@ -617,22 +618,23 @@
 
   .particle {
     position: absolute;
-    width: 4px;
-    height: 4px;
-    background: hsl(var(--primary));
+    width: 6px;
+    height: 6px;
+    background: linear-gradient(45deg, hsl(var(--primary)), #00CFFF);
     border-radius: 50%;
-    animation: particleFloat 3s linear infinite;
+    animation: particleFloat 4s ease-in-out infinite;
+    box-shadow: 0 0 10px rgba(108, 99, 255, 0.5);
   }
 
   .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
-  .particle:nth-child(2) { left: 20%; animation-delay: 0.5s; }
-  .particle:nth-child(3) { left: 30%; animation-delay: 1s; }
-  .particle:nth-child(4) { left: 40%; animation-delay: 1.5s; }
-  .particle:nth-child(5) { left: 50%; animation-delay: 2s; }
-  .particle:nth-child(6) { left: 60%; animation-delay: 2.5s; }
-  .particle:nth-child(7) { left: 70%; animation-delay: 3s; }
-  .particle:nth-child(8) { left: 80%; animation-delay: 3.5s; }
-  .particle:nth-child(9) { left: 90%; animation-delay: 4s; }
+  .particle:nth-child(2) { left: 20%; animation-delay: 0.6s; }
+  .particle:nth-child(3) { left: 30%; animation-delay: 1.2s; }
+  .particle:nth-child(4) { left: 40%; animation-delay: 1.8s; }
+  .particle:nth-child(5) { left: 50%; animation-delay: 2.4s; }
+  .particle:nth-child(6) { left: 60%; animation-delay: 3s; }
+  .particle:nth-child(7) { left: 70%; animation-delay: 3.6s; }
+  .particle:nth-child(8) { left: 80%; animation-delay: 4.2s; }
+  .particle:nth-child(9) { left: 90%; animation-delay: 4.8s; }
 
   /* Expanding Cards Grid */
   .expanding-cards-grid {

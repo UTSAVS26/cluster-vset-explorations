@@ -2,9 +2,20 @@ import { Mail, Linkedin, Github, Users, Award, Target, Zap } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { teamData } from '@/data/teamData';
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled from 'styled-components';
 import { FaTwitter, FaInstagram, FaXTwitter } from "react-icons/fa6";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+
+// Declare VANTA type for TypeScript
+declare global {
+  interface Window {
+    VANTA: any;
+  }
+}
 
 // Styled Components for Uiverse.io Card Design
 const CardContainer = styled.div`
@@ -309,9 +320,9 @@ const CoreMemberCard = ({ member }: { member: any }) => {
             )}
           </SocialLinksContainer>
           
-          {/* <ContactButton onClick={() => window.open(`mailto:${member.email || 'contact@cluster-vset.com'}`, '_blank')}>
-            Contact me
-          </ContactButton> */}
+          <div className="text-xs text-white/70 font-medium tracking-wide">
+            Hover here to know more
+          </div>
         </BottomBottom>
       </Bottom>
     </CardContainer>
@@ -342,6 +353,77 @@ const CoreMembers = () => {
 };
 
 const Leadership = () => {
+  const [selectedMember, setSelectedMember] = useState(null);
+  const statsRef = useRef(null);
+  const vantaRef = useRef(null);
+  const [vantaEffect, setVantaEffect] = useState(null);
+
+  useEffect(() => {
+    const statsElements = statsRef.current?.querySelectorAll('.stat-number');
+    
+    if (statsElements) {
+      statsElements.forEach((element, index) => {
+        const finalValue = element.textContent;
+        const numericValue = parseInt(finalValue.replace(/\D/g, ''));
+        
+        // Set initial value to 0
+        element.textContent = '0' + (finalValue.includes('+') ? '+' : '');
+        
+        gsap.to(element, {
+          textContent: finalValue,
+          duration: 2,
+          ease: "power2.out",
+          delay: index * 0.2,
+          onUpdate: function() {
+            const currentValue = Math.round(this.progress() * numericValue);
+            element.textContent = currentValue + (finalValue.includes('+') ? '+' : '');
+          },
+          scrollTrigger: {
+            trigger: element,
+            start: "top 80%",
+            toggleActions: "play none none reverse"
+          }
+        });
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    const initVanta = () => {
+      if (!vantaEffect && vantaRef.current && window.VANTA && window.VANTA.TOPOLOGY) {
+        try {
+          setVantaEffect(
+            window.VANTA.TOPOLOGY({
+              el: vantaRef.current,
+              mouseControls: true,
+              touchControls: true,
+              gyroControls: false,
+              minHeight: 200.00,
+              minWidth: 200.00,
+              scale: 1.00,
+              scaleMobile: 1.00,
+              color: 0x4e8596,
+              backgroundColor: 0x1d0838
+            })
+          );
+        } catch (error) {
+          console.log('Vanta topology initialization failed:', error);
+        }
+      }
+    };
+
+    // Try to initialize immediately
+    initVanta();
+
+    // If not available, try again after a short delay
+    const timer = setTimeout(initVanta, 1000);
+
+    return () => {
+      clearTimeout(timer);
+      if (vantaEffect) vantaEffect.destroy();
+    };
+  }, [vantaEffect]);
+
   // Glass effect styles
   const glassStyles = `
     .container {
@@ -350,6 +432,7 @@ const Leadership = () => {
       justify-content: center;
       align-items: center;
       gap: 20px;
+      flex-wrap: wrap;
     }
 
     .container .glass {
@@ -406,6 +489,68 @@ const Leadership = () => {
       margin-top: 10px;
       opacity: 0.9;
       max-width: 220px;
+    }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        gap: 30px;
+        padding: 0 20px;
+      }
+
+      .container .glass {
+        width: 100%;
+        max-width: 320px;
+        height: 280px;
+        margin: 0;
+        transform: rotate(0deg) !important;
+        padding: 24px 20px;
+      }
+
+      .container:hover .glass {
+        margin: 0;
+        transform: rotate(0deg);
+      }
+
+      .container .glass::before {
+        height: 45px;
+        font-size: 1em;
+      }
+
+      .container .glass svg {
+        font-size: 2.8em;
+        margin-bottom: 12px;
+      }
+
+      .container .glass .description {
+        font-size: 0.85em;
+        line-height: 1.5;
+        max-width: 100%;
+        padding: 0 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container .glass {
+        height: 260px;
+        padding: 20px 16px;
+      }
+
+      .container .glass::before {
+        height: 40px;
+        font-size: 0.9em;
+      }
+
+      .container .glass svg {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+      }
+
+      .container .glass .description {
+        font-size: 0.8em;
+        line-height: 1.4;
+      }
     }
   `;
   const TeamMemberCard = ({ member, isCore = false }: { member: any, isCore?: boolean }) => (
@@ -474,17 +619,17 @@ const Leadership = () => {
   );
 
   const organizationStats = [
-    { icon: Users, label: 'Total Members', value: `${teamData.coreTeam.length + teamData.extendedTeam.length}+`, color: 'text-blue-400' },
-    { icon: Award, label: 'Years Active', value: '4+', color: 'text-green-400' },
-    { icon: Target, label: 'Projects Led', value: '25+', color: 'text-purple-400' },
-    { icon: Zap, label: 'Events Organized', value: '50+', color: 'text-orange-400' }
+    { icon: Users, label: 'Total Members', value: `100+`, color: 'text-blue-400' },
+    { icon: Award, label: 'Years Active', value: '1+', color: 'text-green-400' },
+    { icon: Target, label: 'Projects Led', value: '30+', color: 'text-purple-400' },
+    { icon: Zap, label: 'Events Organized', value: '5+', color: 'text-orange-400' }
   ];
 
   return (
-    <div className="min-h-screen py-12">
+    <div className="min-h-screen ">
       <style dangerouslySetInnerHTML={{ __html: glassStyles }} />
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-hero">
+      <section ref={vantaRef} className="py-20 bg-gradient-hero relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
@@ -500,16 +645,21 @@ const Leadership = () => {
       </section>
 
       {/* Organization Stats */}
-      <section className="py-20">
+      <section className="py-20" ref={statsRef}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16">
             {organizationStats.map((stat, index) => {
               const IconComponent = stat.icon;
               return (
-                <Card key={index} className="text-center hover-glow-primary transition-all duration-300 bg-card/50">
+                <Card
+                  key={index}
+                  className="text-center hover-glow-primary transition-all duration-300 
+                             bg-gradient-to-br from-purple-900/80 via-blue-900/70 to-cyan-900/60 
+                             border border-purple-800/50 backdrop-blur-sm shadow-lg"
+                >
                   <CardContent className="pt-6">
                     <IconComponent className={`w-12 h-12 mx-auto mb-4 ${stat.color}`} />
-                    <div className="text-3xl font-bold text-gradient-primary mb-2">
+                    <div className="text-3xl font-bold text-gradient-primary mb-2 stat-number">
                       {stat.value}
                     </div>
                     <p className="text-muted-foreground text-sm font-medium">
@@ -524,7 +674,7 @@ const Leadership = () => {
       </section>
 
       {/* Core Members Carousel */}
-      <section className="py-20">
+      <section className="pt-0 pb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <CoreMembers />
         </div>
@@ -550,13 +700,13 @@ const Leadership = () => {
       </section>
 
       {/* Leadership Philosophy */}
-      <section className="py-20 bg-card/30">
+      <section className="py-16 md:py-20 bg-card/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-gradient-primary">
+          <div className="text-center mb-12 md:mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-3 md:mb-4 text-gradient-primary">
               Our Leadership Philosophy
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto px-4">
               The principles that guide how we lead and serve our community
             </p>
           </div>

@@ -73,10 +73,11 @@ export const teamData = {
       id: 8,
       name: "Rhythm Arora",
       role: "Sponsorship Head",
-      image: "/leadership/rhythm.png",
+      image: "/leadership/rhythm.jpg",
       bio: "Passionate about AI, data science, and research, I actively organize workshops and tech events as an event manager, enhance my skills in cloud computing, eagerly looking for new learning opportunities, and find joy in books, soothing music, and the beauty of roses.",
       linkedin: "https://www.linkedin.com/in/rhythmisloading/",
-      github: "",
+      X: "https://x.com/rhythmisloading",
+      github: "https://github.com/rhythmarora070"
     },
     {
       id: 16,
